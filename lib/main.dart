@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Wordpair = WordPair.random();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Welcome To Flutter',
@@ -19,8 +18,35 @@ class MyApp extends StatelessWidget {
           title: const Text('Trying Again'),
           centerTitle: true,
         ),
-        body: Center(child: Text(Wordpair.asPascalCase)),
+        body: const Center(child: RandomWords()),
       ),
+    );
+  }
+}
+
+class RandomWords extends StatefulWidget {
+  const RandomWords({Key? key}) : super(key: key);
+
+  @override
+  State<RandomWords> createState() => _RandomWordsState();
+}
+
+class _RandomWordsState extends State<RandomWords> {
+  @override
+  Widget build(BuildContext context) {
+    final Wordpair = WordPair.random();
+    List suggestion = <WordPair>[];
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: ListView.builder(itemBuilder: (context, i) {
+        final index = i ~/ 2;
+        if (index >= suggestion.length) {
+          suggestion.addAll(generateWordPairs().take(10));
+        }
+        return ListTile(
+          title: Text(suggestion[index].asPascalCase),
+        );
+      }),
     );
   }
 }
